@@ -15,7 +15,10 @@ long timediff(clock_t t1, clock_t t2) {
 int main(int argc, char** argv) {
 	int step = 1,ch;
 	bool slowMode = true;
-	long TESTN = 1024*1024*1024*8L;
+	// 8G内存
+	// long TESTN = 1024*1024*1024*8L;
+	// 自己的CentOS上面1024步长时OOM了(目前可用只有3GB内存，定义2GB)，减小长度
+	long TESTN = 1024*256*1024*8L;
 	while((ch = getopt(argc, argv, "s:")) != -1) {
 		switch(ch)
 		{

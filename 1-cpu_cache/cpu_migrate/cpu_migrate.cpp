@@ -18,7 +18,7 @@ void* loopcalc(void* args) {
 	if (setaffinity) {
 		cpu_set_t mask;  //CPU核的集合
 		cpu_set_t get;	 //获取在集合中的CPU
-		//获取线程的序列号
+		//获取线程的序列号(传入的是数组下标)
 		int *thread_num = (int *)args; 
 
 		//将当前线程绑定至特定CPU
@@ -36,19 +36,21 @@ void* loopcalc(void* args) {
 	//这个循环中由于反复访问有限的数组，CPU缓存命中率非常高
 	unsigned char* arr = new unsigned char[TESTN];
 	for (long i = 0; i < TESTN; i++) arr[i] = rand() % 256;
-	for (int j = 1; j < TESTN; j++) {
+	for (int j = 1; j < TESTN*30; j++) {
 		for (long i = 0; i < TESTN; i++) arr[i] += 1;
 	}
 
 	gettimeofday(&tEnd, 0);
 
-	//将消耗时间传出到timecost数组中对应的元素上
+	//将消耗时间(ms)传出到timecost数组中对应的元素上
 	*(long*)args = (1000000LL * (tEnd.tv_sec-tStart.tv_sec) + (tEnd.tv_usec-tStart.tv_usec))/1000;
 }
 
 int main(int argc, char** argv) {
 	int threadnum = 2;
 	int ch;
+	// 如果字符接一个冒号(colon)，则需要一个参数，从optarg中读取(或者从argv读取)
+	// 两个冒号则说明接一个可选参数，若送了参数，则optarg中返回，若无则optarg设置为0
 	while((ch = getopt(argc, argv, "t:fs")) != -1) {
 		switch(ch)
 		{
@@ -67,6 +69,7 @@ int main(int argc, char** argv) {
 		}
 	}
 
+	// 存线程id
 	pthread_t* id = new pthread_t[threadnum];
 	//统计每个线程计算所需要的时间
 	long* timecost = new long[threadnum];

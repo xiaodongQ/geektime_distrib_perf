@@ -34,7 +34,7 @@ int main(int argc, char** argv) {
 	}
 	cout<<(slowMode?"arr[j][i]":"arr[i][j]")<<endl;
 
-	//在栈上分配二维数组天然是内存连续的，需要注意TESTN的大小，不要超过栈的最大字节
+	//在栈上分配二维数组天然是内存连续的，需要注意TESTN的大小，不要超过栈的最大字节(ulimit -s查看为8MB)
 	char arr[TESTN][TESTN];
 	//使用clock比取系统时间能够更准确的看到消耗了多少CPU资源
 	clock_t start, end;

@@ -8,6 +8,7 @@
 
 using namespace std;
 
+// 128M
 #define TESTN 128*1024*1024L
 
 long timediff(clock_t t1, clock_t t2) {
